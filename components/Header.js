@@ -9,7 +9,7 @@ export default function Header() {
             <button className="btn-search" aria-label="Search">🔍</button>
           </div>
           <div className="brand-wrap">
-            <Link href="/" className="brand">YOURSTORY</Link>
+            <Link href="/" className="brand">VEPAAR STORIES</Link>
           </div>
           <div className="actions">
             <button className="btn-signin">Sign In</button>
