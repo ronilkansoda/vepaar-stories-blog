@@ -15,9 +15,9 @@ export default async function PostPage({ params }) {
           <span className="star-icon">⭐</span>
           <span>Member-only story</span>
         </div>
-        
+
         <h1 className="blog-post-title">{post.title}</h1>
-        
+
         <div className="author-section">
           <div className="author-info">
             <div className="author-avatar">
@@ -28,7 +28,7 @@ export default async function PostPage({ params }) {
               <button className="follow-btn">Follow</button>
             </div>
           </div>
-          
+
           <div className="post-meta">
             <span className="read-time">3 min read</span>
             <span className="post-date">{post.date}</span>
@@ -46,7 +46,7 @@ export default async function PostPage({ params }) {
               <span>188</span>
             </button>
           </div>
-          
+
           <div className="right-actions">
             <button className="action-btn">📖</button>
             <button className="action-btn">🔖</button>
