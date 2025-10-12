@@ -2,6 +2,15 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
+const categories = [
+  { name: "Business Stories", slug: "business_stories" },
+  { name: "Financial Tips", slug: "financial_tips" },
+  { name: "Leadership", slug: "leadership" },
+  { name: "Entrepreneurship", slug: "entrepreneurship" },
+  { name: "Productivity", slug: "productivity" },
+  { name: "Personal Growth", slug: "personal_growth" },
+];
+
 export default function Header() {
   const [currentTime, setCurrentTime] = useState('');
 
@@ -22,7 +31,6 @@ export default function Header() {
 
     updateTime();
     const interval = setInterval(updateTime, 1000);
-
     return () => clearInterval(interval);
   }, []);
 
@@ -54,25 +62,30 @@ export default function Header() {
         <div className="py-2 md:py-3 px-3 md:px-5">
           {/* Desktop Navigation */}
           <ul className="hidden md:flex list-none gap-7 p-0 m-0 justify-center text-base">
-            <li className="cursor-pointer text-gray-600 font-medium transition-colors hover:text-gray-900">Founder First</li>
-            <li className="cursor-pointer text-gray-600 font-medium transition-colors hover:text-gray-900">Just In</li>
-            <li className="cursor-pointer text-gray-600 font-medium transition-colors hover:text-gray-900">Brands</li>
-            <li className="cursor-pointer text-gray-600 font-medium transition-colors hover:text-gray-900">Resources</li>
-            <li className="cursor-pointer text-gray-600 font-medium transition-colors hover:text-gray-900">YSTV</li>
-            <li className="cursor-pointer text-gray-600 font-medium transition-colors hover:text-gray-900">Events</li>
-            <li className="cursor-pointer text-gray-600 font-medium transition-colors hover:text-gray-900">Newsletter</li>
-            <li className="cursor-pointer text-gray-600 font-medium transition-colors hover:text-gray-900">Stories</li>
-            <li className="cursor-pointer text-gray-600 font-medium transition-colors hover:text-gray-900">Reports</li>
+            {categories.map((cat) => (
+              <li key={cat.slug}>
+                <Link
+                  href={`/${cat.slug}`}
+                  className="cursor-pointer text-gray-600 font-medium transition-colors hover:text-gray-900"
+                >
+                  {cat.name}
+                </Link>
+              </li>
+            ))}
           </ul>
-
           {/* Mobile Navigation - Scrollable  */}
           <div className="md:hidden overflow-x-auto">
             <ul className="flex list-none justify-center gap-4 p-0 m-0 text-sm whitespace-nowrap">
-              <li className="cursor-pointer text-gray-600 font-medium transition-colors hover:text-gray-900 flex-shrink-0">Founder First</li>
-              <li className="cursor-pointer text-gray-600 font-medium transition-colors hover:text-gray-900 flex-shrink-0">Brands</li>
-              <li className="cursor-pointer text-gray-600 font-medium transition-colors hover:text-gray-900 flex-shrink-0">Events</li>
-              <li className="cursor-pointer text-gray-600 font-medium transition-colors hover:text-gray-900 flex-shrink-0">Stories</li>
-              <li className="cursor-pointer text-gray-600 font-medium transition-colors hover:text-gray-900 flex-shrink-0">Reports</li>
+              {categories.map((cat) => (
+                <li key={cat.slug} className="flex-shrink-0">
+                  <Link
+                    href={`/${cat.slug}`}
+                    className="cursor-pointer text-gray-600 font-medium transition-colors hover:text-gray-900"
+                  >
+                    {cat.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
