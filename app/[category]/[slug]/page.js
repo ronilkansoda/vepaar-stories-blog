@@ -26,9 +26,9 @@ export default async function PostPage({ params }) {
     }
 
     return (
-        <article className="max-w-3xl mx-auto px-6 py-12 font-serif bg-white">
-            <div className="mb-12">
-                <h1 className="text-5xl font-normal leading-tight mb-8 text-gray-800">{data.title}</h1>
+        <article className="max-w-3xl mx-auto px-1 py-6 sm:px-6 sm:py-12 font-serif bg-white">
+            <div className="mb-8 sm:mb-12">
+                <h1 className="text-3xl sm:text-5xl font-normal leading-tight mb-4 sm:mb-8 text-gray-800">{data.title}</h1>
                 <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-200">
                     <div className="flex items-center gap-3">
                         <div>
@@ -50,14 +50,14 @@ export default async function PostPage({ params }) {
                     <img src={data.cover_image} alt={data.title} className="w-full h-80 object-cover rounded" />
                 </div>
             )}
-            <div className="text-xl leading-relaxed text-gray-800 mb-16">
+            <div className="text-xl leading-relaxed text-gray-800 mb-14  sm:mb-16">
                 <div dangerouslySetInnerHTML={{ __html: data.content }} />
             </div>
             {/* Recommended Articles (unchanged) */}
-            <div className="border-t border-gray-200 pt-12">
-                <h3 className="text-2xl font-medium m-0 mb-8 text-gray-800">Recommended from Vepaar Stories</h3>
+            {/* <div className="border-t border-gray-200 pt-12">
+                <h3 className="text-3xl sm:text-5xl font-normal leading-tight mb-8 sm:mb-10 text-gray-800">Recommended from Vepaar Stories</h3> 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {/* ...existing code for recommended articles... */}
+                
                     <div className="flex flex-col gap-4">
                         <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=200&fit=crop" alt="AI Bubble" className="w-full h-50 object-cover rounded" />
                         <div className="flex flex-col gap-3">
@@ -66,7 +66,7 @@ export default async function PostPage({ params }) {
                                 <span>Will Lockett</span>
                                 <span className="text-green-600">✓</span>
                             </div>
-                            <h4 className="text-base font-semibold text-gray-800 m-0 leading-snug">The AI Bubble Is About To Burst, But The Next Bubble Is Already...</h4>
+                            <h4 className="text-base  text-gray-800 m-0 leading-snug">The AI Bubble Is About To Burst, But The Next Bubble Is Already...</h4>
                             <p className="text-sm text-gray-500 m-0 leading-snug">Techbros are preparing their latest bandwagon.</p>
                             <div className="flex items-center gap-4 text-xs text-gray-500">
                                 <span>⭐ Sep 15</span>
@@ -77,7 +77,6 @@ export default async function PostPage({ params }) {
                             </div>
                         </div>
                     </div>
-                    {/* ...existing code for other recommended articles... */}
                     <div className="flex flex-col gap-4">
                         <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=200&fit=crop" alt="Chat GPT" className="w-full h-50 object-cover rounded" />
                         <div className="flex flex-col gap-3">
@@ -133,7 +132,7 @@ export default async function PostPage({ params }) {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </article>
     );
 }

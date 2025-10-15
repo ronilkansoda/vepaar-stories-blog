@@ -80,7 +80,7 @@ export default function Header() {
                 <li key={cat.slug} className="flex-shrink-0">
                   <Link
                     href={`/${cat.slug}`}
-                    className="cursor-pointer text-gray-600 font-medium transition-colors hover:text-gray-900"
+                    className="cursor-pointer text-[14px] text-gray-600 font-medium transition-colors hover:text-gray-900"
                   >
                     {cat.name}
                   </Link>
