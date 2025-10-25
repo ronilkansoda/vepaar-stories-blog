@@ -3,7 +3,7 @@ import { supabase } from "@/lib/supabaseClient";
 // import UploadTester from "./UploadTester";
 
 export default async function PostPage({ params }) {
-    const { slug } = await params;
+    const { slug } = params;
     const { data, error } = await supabase
         .from("blogs")
         .select("title,content,cover_image,published_at,author_id")
