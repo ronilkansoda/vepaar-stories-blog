@@ -24,11 +24,11 @@ export default async function BlogPage({ params }) {
             <p className="text-lg text-gray-600 mb-8">Practical posts to help you run and grow your business.</p>
             <ul className="space-y-6">
                 {blogs?.map((p) => (
-                    <li key={p.slug} className="border border-gray-200 rounded-lg hover:shadow-md transition-shadow overflow-hidden">
+                    <li key={p.slug} className="bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow overflow-hidden">
                         <Link href={`/${category}/${p.slug}`} className="flex gap-5 p-5 items-start group">
                             <div className="w-32 h-24 flex-shrink-0 rounded-md overflow-hidden bg-gray-100">
                                 <img
-                                    src={p.cover_image || "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&q=60&auto=format&fit=crop"}
+                                   src={`https://ogwaodgxdsnxjjkfmujm.supabase.co/storage/v1/object/public/cover_images/${p.cover_image}`}
                                     alt={p.title}
                                     className="w-full h-full object-cover"
                                     loading="lazy"

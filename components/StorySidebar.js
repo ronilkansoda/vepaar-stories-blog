@@ -4,13 +4,13 @@ export default function StorySidebar({ items }) {
   return (
     <aside className="order-2 lg:order-2">
       <div>
-        <h3 className="heading-1 my-0 mb-3 text-gray-900">The CapTable</h3>
-        <div className="flex flex-col gap-5">
+        <h3 className="heading-1 my-0 mb-6 text-gray-900">The CapTable</h3>
+        <div className="flex flex-col gap-2">
           {items.map((item, idx) => (
             <Link key={idx} href={`/${item.category}/${item.slug}`}>
-              <div className="flex items-center justify-between gap-4 py-2.5 border-t border-gray-200">
-                <div className="flex-1 mr-3 font-semibold text-gray-900 body">{item.title}</div>
-                <img className="w-30 h-20 object-cover rounded-md" src={item.image} alt={item.title} />
+              <div className="flex items-center justify-between gap-4 py-2 border-t border-gray-200">
+                <div className="flex-1 font-semibold sidebar-subheading">{item.title}</div>
+                <img className="w-38 h-24 object-cover rounded-md" src={`https://ogwaodgxdsnxjjkfmujm.supabase.co/storage/v1/object/public/cover_images/${item.image}`} alt={item.title} />
               </div>
             </Link>
           ))}

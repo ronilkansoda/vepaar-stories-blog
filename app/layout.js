@@ -14,7 +14,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Vepaar Stories — Business & Finance Tips",
+  title: {
+    default: "Vepaar Stories — Stories about Business & Finance Tips",
+    template: "%s | Vepaar Stories"
+  },
   description: "Short, practical business and financial tips to help entrepreneurs and professionals.",
 };
 

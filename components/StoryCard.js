@@ -7,7 +7,7 @@ export default function StoryCard({ story }) {
       <Link href={`/${story.category}/story/${story.slug}`} className="flex gap-5 p-5 items-start group">
         <div className="w-32 h-24 flex-shrink-0 rounded-md overflow-hidden bg-gray-100">
           <img
-            src={story.image}
+            src={`https://ogwaodgxdsnxjjkfmujm.supabase.co/storage/v1/object/public/cover_images/${story.image}`}
             alt={story.title}
             className="w-full h-full object-cover"
             loading="lazy"
