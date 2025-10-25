@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,7 +14,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Vepaar Stories — Business & Finance Tips",
+  title: {
+    default: "Vepaar Stories — Stories about Business & Finance Tips",
+    template: "%s | Vepaar Stories"
+  },
   description: "Short, practical business and financial tips to help entrepreneurs and professionals.",
 };
 
@@ -24,7 +28,8 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Header />
-        <main className="max-w-4xl mx-auto px-6">{children}</main>
+        <main className="max-w-5xl mx-auto px-6">{children}</main>
+        <Footer />
       </body>
     </html>
   );
