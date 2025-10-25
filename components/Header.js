@@ -13,6 +13,8 @@ const categories = [
 
 export default function Header() {
   const [currentTime, setCurrentTime] = useState('');
+  const [hasScrolled, setHasScrolled] = useState(false); // controls shadow on sticky nav
+  const [showTopBar, setShowTopBar] = useState(true); // controls visibility of top logo/date section
 
   useEffect(() => {
     const updateTime = () => {
@@ -22,9 +24,6 @@ export default function Header() {
         year: 'numeric',
         month: 'short',
         day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true
       };
       setCurrentTime(now.toLocaleDateString('en-US', options));
     };
@@ -34,9 +33,55 @@ export default function Header() {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    // Smooth, flicker-free scroll handling using rAF + hysteresis
+    const HIDE_AFTER = 120; // hide top bar after scrolling past this
+    const SHOW_BEFORE = 40; // show top bar only when near top again
+
+    let lastY = 0;
+    let ticking = false;
+
+    const updateOnScroll = () => {
+      // Shadow for the sticky nav
+      setHasScrolled(lastY > 10);
+
+      // Hysteresis: avoid rapid toggling around a single threshold
+      setShowTopBar(prev => {
+        if (prev) {
+          // currently visible; only hide when clearly past HIDE_AFTER
+          if (lastY > HIDE_AFTER) return false;
+          return prev;
+        } else {
+          // currently hidden; only show again when clearly above top
+          if (lastY < SHOW_BEFORE) return true;
+          return prev;
+        }
+      });
+
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      lastY = window.scrollY || 0;
+      if (!ticking) {
+        window.requestAnimationFrame(updateOnScroll);
+        ticking = true;
+      }
+    };
+
+    // Initialize with current position and attach listener
+    lastY = typeof window !== 'undefined' ? window.scrollY || 0 : 0;
+    updateOnScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   return (
-    <header className="w-full border-b border-gray-300">
-      <div className="bg-white">
+    <header className={`sticky top-0 z-50 w-full border-b border-gray-300 bg-white/95 backdrop-blur-sm transition-shadow duration-300 ${hasScrolled ? 'shadow-md' : ''
+      }`}>
+      <div className={`bg-white overflow-hidden transition-all duration-500 ease-in-out ${
+        showTopBar ? 'max-h-[200px] opacity-100' : 'max-h-0 opacity-0'
+        }`}>
         <div className="max-w-5xl mx-auto flex items-center justify-between py-3 md:py-5 px-3 md:px-5">
           {/* Left side - Date/Time (hidden on mobile) */}
           <div className="flex items-center gap-3">

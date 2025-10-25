@@ -5,7 +5,7 @@ export default function Footer() {
   const year = new Date().getFullYear();
   return (
     <footer className="w-full bg-gray-50 border-t border-gray-200 mt-12">
-      <div className="max-w-7xl mx-auto px-5 py-10 grid grid-cols-1 md:grid-cols-6 gap-8 border-b border-gray-200 body">
+      <div className="max-w-7xl mx-auto px-5 py-10 grid grid-cols-1 md:grid-cols-4 md:px-40 gap-8 border-b border-gray-200 body">
         {/* Brands */}
         <div>
           <h3 className="heading-3 mb-3">Brands</h3>
@@ -16,8 +16,6 @@ export default function Footer() {
             <li>Social Story</li>
             <li>Enterprise Story</li>
             <li>YS Life</li>
-            <li>YS Hindi</li>
-            <li>YS Tamil</li>
           </ul>
         </div>
         {/* Topics */}
@@ -30,14 +28,9 @@ export default function Footer() {
             <li>Swiggy</li>
             <li>Zomato</li>
             <li>Uber</li>
-            <li>Delhivery</li>
-            <li>Amazon</li>
-            <li>Cred</li>
-            <li>Nykaa</li>
-            <li>View All Topics</li>
           </ul>
         </div>
-        {/* Resource Hub */}
+        {/* Resource Hub
         <div>
           <h3 className="heading-3 mb-3">Resource Hub</h3>
           <ul className="space-y-1 text-gray-700 caption">
@@ -49,11 +42,15 @@ export default function Footer() {
             <li>Unicorns Of India</li>
             <li>Fundraising Thermometer</li>
           </ul>
-        </div>
+        </div> */}
         {/* Upcoming Events */}
         <div>
           <h3 className="heading-3 mb-3">Upcoming Events</h3>
           <ul className="space-y-1 text-gray-700 caption">
+            <li>TechSparks 2025 Bengaluru</li>
+            <li>TechSparks 2025 Bengaluru</li>
+            <li>TechSparks 2025 Bengaluru</li>
+            <li>TechSparks 2025 Bengaluru</li>
             <li>TechSparks 2025 Bengaluru</li>
           </ul>
         </div>
@@ -65,13 +62,15 @@ export default function Footer() {
             <li>Pitch To Us</li>
             <li>Browse Startups</li>
             <li>Bharat Project</li>
+            <li>Bharat Project</li>
+            <li>Bharat Project</li>
           </ul>
         </div>
         {/* Newsletter/Other Info */}
-        <div>
+        {/* <div>
           <h3 className="heading-3 mb-3">Newsletter</h3>
           <p className="text-gray-700 caption mb-3">Sign up for our newsletter to get the latest stories and updates.</p>
-        </div>
+        </div> */}
       </div>
       <div className="max-w-7xl mx-auto px-5 py-8 flex flex-col md:flex-row items-center justify-between">
         <div className="heading-hero tracking-tight text-gray-900 mb-4 md:mb-0">VEPAAR STORIES</div>
