@@ -103,7 +103,7 @@ export default function Home() {
             {trendingStories.map((story, idx) => (
               <Link key={idx} href={`/${story.category}/${story.slug}`}>
                 <div className="min-w-[180px] w-[180px] md:min-w-[200px] md:w-[200px] font-semibold relative flex-shrink-0 snap-start sm:static">
-                  <img src={`https://ogwaodgxdsnxjjkfmujm.supabase.co/storage/v1/object/public/cover_images/${story.image}`} alt={`thumb${idx + 2}`} className="w-full h-24 md:h-28 object-cover rounded mb-2" />
+                  <img src={`${story.image}`} alt={`thumb${idx + 2}`} className="w-full h-24 md:h-28 object-cover rounded mb-2" />
                   <div className="subheading mt-1.5">{story.caption}</div>
                 </div>
               </Link>
@@ -134,7 +134,7 @@ export default function Home() {
                 className="flex gap-3.5 py-3 border-t border-gray-200 items-center"
               >
                 <img
-                  src={`https://ogwaodgxdsnxjjkfmujm.supabase.co/storage/v1/object/public/cover_images/${story.image}`}
+                  src={`${story.image}`}
                   alt={story.title}
                   className="w-36 h-24 object-cover rounded-md"
                 />
@@ -152,7 +152,7 @@ export default function Home() {
                 className="flex gap-3.5 py-3 border-t border-gray-200 items-center"
               >
                 <img
-                  src={`https://ogwaodgxdsnxjjkfmujm.supabase.co/storage/v1/object/public/cover_images/${story.image}`}
+                  src={`${story.image}`}
                   alt={story.title}
                   className="w-36 h-24 object-cover rounded-md"
                 />

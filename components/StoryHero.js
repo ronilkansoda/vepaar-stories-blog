@@ -6,7 +6,7 @@ export default function StoryHero({ story }) {
       {story.map((item, idx) => (
         <Link key={idx} href={`/${item.category}/${item.slug}`}>
           <img
-           src={`https://ogwaodgxdsnxjjkfmujm.supabase.co/storage/v1/object/public/cover_images/${item.image}`}
+           src={`${item.image}`}
             alt={item.title}
             className="w-full h-74 object-cover rounded-md mb-5"
           />

@@ -6,7 +6,7 @@ export default async function PostPage({ params }) {
     const { slug } = params;
     const { data, error } = await supabase
         .from("blogs")
-        .select("title,content,cover_image,published_at,author_id")
+        .select("title,content,cover_image,published_at,author_id,reading_time")
         .eq("slug", slug)
         .eq("status", "published")
         .single();
@@ -41,7 +41,7 @@ export default async function PostPage({ params }) {
                         </div>
                     </div>
                     <div className="flex items-center gap-4 text-gray-500 text-sm">
-                        <span>3 min read</span>
+                        <span>{data.reading_time} read</span>
                         <span>{new Date(data.published_at).toLocaleDateString()}</span>
                     </div>
                 </div>
@@ -49,7 +49,7 @@ export default async function PostPage({ params }) {
             {/* Cover image if present */}
             {data.cover_image && (
                 <div className="mb-10">
-                    <img src={`https://ogwaodgxdsnxjjkfmujm.supabase.co/storage/v1/object/public/cover_images/${data.cover_image}`} alt={data.title} className="w-full h-80 object-cover rounded" />
+                    <img src={`${data.cover_image}`} alt={data.title} className="w-full h-80 object-cover rounded" />
                 </div>
             )}
             <div className="text-xl leading-relaxed text-gray-800 mb-14  sm:mb-16">

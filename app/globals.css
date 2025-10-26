@@ -141,3 +141,33 @@ body {
     font-size: 20px;
   }
 }
+
+/* Quill Editor Blockquote Styling */
+.ql-editor blockquote {
+  border-left: 2px solid #000000;
+  padding-left: 16px;
+  margin-left: 0;
+  margin-right: 0;
+  font-style: italic;
+  color: #000000;
+}
+
+/* Blockquote styling for rendered blog content */
+article blockquote {
+  border-left: 4px solid #000000;
+  padding-left: 20px;
+  margin: 1.5em 0;
+  font-style: italic;
+  color: #1a1a1a;
+  font-size: 1.1em;
+}
+
+/* Quill Editor Height */
+.ql-container {
+  min-height: 300px;
+  font-size: 16px;
+}
+
+.ql-editor {
+  min-height: 300px;
+}
