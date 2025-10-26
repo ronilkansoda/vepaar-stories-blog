@@ -1,5 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+// Import Quill Snow theme globally to satisfy Next.js global CSS rules
+import "react-quill-new/dist/quill.snow.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
