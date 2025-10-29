@@ -27,7 +27,7 @@ export default async function PostPage({ params }) {
     }
 
     return (
-        <article className="max-w-3xl mx-auto px-1 py-6 sm:px-6 sm:py-12 font-serif">
+        <article className="max-w-3xl mx-auto px-1 py-6 sm:px-6 sm:py-10 font-serif">
             {/* <UploadTester /> */}
             <div className="mb-8 sm:mb-12">
                 <h1 className="text-3xl sm:text-5xl font-normal leading-tight mb-4 sm:mb-8 text-gray-800">{data.title}</h1>
@@ -52,7 +52,7 @@ export default async function PostPage({ params }) {
                     <img src={`${data.cover_image}`} alt={data.title} className="w-full h-80 object-cover rounded" />
                 </div>
             )}
-            <div className="text-xl leading-relaxed text-gray-800 mb-14  sm:mb-16">
+            <div className="text-[16px] leading-relaxed text-gray-800 mb-14 sm:text-[18px] sm:mb-16">
                 <div dangerouslySetInnerHTML={{ __html: data.content }} />
             </div>
         </article>
