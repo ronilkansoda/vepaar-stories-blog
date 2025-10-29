@@ -1,8 +1,8 @@
+"use client";
 import dynamic from "next/dynamic";
 import { useMemo } from "react";
 
-// Dynamically import ReactQuill to avoid SSR issues in Next.js
-import ReactQuill from 'react-quill';
+const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
 export default function RichTextEditor({ value, onChange, placeholder }) {
     const modules = useMemo(
@@ -10,6 +10,7 @@ export default function RichTextEditor({ value, onChange, placeholder }) {
             toolbar: [
                 [{ header: [1, 2, 3, false] }],
                 ["bold", "italic", "underline", "strike"],
+                ["blockquote"],
                 [{ list: "ordered" }, { list: "bullet" }],
                 ["link", "image"],
                 [{ align: [] }],
@@ -25,15 +26,15 @@ export default function RichTextEditor({ value, onChange, placeholder }) {
         "italic",
         "underline",
         "strike",
+        "blockquote",
         "list",
-        "bullet",
         "link",
         "image",
         "align",
     ];
 
     return (
-        <div className="w-full">
+        <div className="w-full p-2 border rounded">
             <ReactQuill
                 theme="snow"
                 value={value || ""}

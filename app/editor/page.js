@@ -12,6 +12,18 @@ const categories = [
   { name: "Personal Growth", slug: "personal_growth" },
 ];
 
+const statuses = [
+  { name: "Draft", value: "draft" },
+  { name: "Published", value: "published" },
+  { name: "Archived", value: "archived" },
+];
+
+const layoutTypes = [
+  { name: "Standard", value: "standard" },
+  { name: "Trending", value: "trending" },
+  { name: "Big Blog", value: "big_blog" },
+];
+
 function slugify(str = "") {
   return str
     .toLowerCase()
@@ -21,32 +33,67 @@ function slugify(str = "") {
     .replace(/-+/g, "-");
 }
 
+function readingTime(text) {
+  const wordsPerMinute = 250; // average adult reading speed
+  // Strip HTML tags to count only actual text
+  const plainText = text.replace(/<[^>]*>/g, ' ');
+  const words = plainText.trim().split(/\s+/).length;
+  const time = Math.ceil(words / wordsPerMinute);
+  return `${time} min`;
+}
+
 export default function EditorPage() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [q, setQ] = useState("");
+  const [message, setMessage] = useState({ text: "", type: "" });
 
   // Form state
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
   const [category, setCategory] = useState(categories[0].slug);
-  const [excerpt, setExcerpt] = useState("");
-  const [coverUrl, setCoverUrl] = useState("");
   const [content, setContent] = useState("");
-  const [published, setPublished] = useState(false);
+  const [layoutType, setLayoutType] = useState("standard");
+  const [status, setStatus] = useState("draft");
+  const [coverImage, setCoverImage] = useState("");
+  const [isFeatured, setIsFeatured] = useState(false);
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState("");
+
+  // Show message function
+  const showMessage = (text, type) => {
+    setMessage({ text, type });
+    setTimeout(() => setMessage({ text: "", type: "" }), 4000);
+  };
 
   // auto-generate slug from title if not manually edited
   useEffect(() => {
     if (!selectedId) setSlug(slugify(title));
   }, [title, selectedId]);
 
+  // Handle image file selection and preview
+  const handleImageSelect = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    setImageFile(file);
+
+    // Create preview URL
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImagePreview(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
+
   async function loadPosts() {
     setLoading(true);
     const { data, error } = await supabase
-      .from("posts")
-      .select("id, title, slug, category, excerpt, cover_url, content, published, created_at, updated_at")
+      .from("blogs")
+      .select("id, title, slug, category, content, cover_image, layout_type, status, is_featured, reading_time, published_at, created_at, updated_at")
       .order("created_at", { ascending: false });
     if (!error) setPosts(data || []);
     setLoading(false);
@@ -61,10 +108,13 @@ export default function EditorPage() {
     setTitle("");
     setSlug("");
     setCategory(categories[0].slug);
-    setExcerpt("");
-    setCoverUrl("");
     setContent("");
-    setPublished(false);
+    setLayoutType("standard");
+    setStatus("draft");
+    setCoverImage("");
+    setIsFeatured(false);
+    setImageFile(null);
+    setImagePreview("");
   }
 
   function editPost(p) {
@@ -72,40 +122,81 @@ export default function EditorPage() {
     setTitle(p.title || "");
     setSlug(p.slug || "");
     setCategory(p.category || categories[0].slug);
-    setExcerpt(p.excerpt || "");
-    setCoverUrl(p.cover_url || "");
     setContent(p.content || "");
-    setPublished(!!p.published);
+    setLayoutType(p.layout_type || "standard");
+    setStatus(p.status || "draft");
+    setCoverImage(p.cover_image || "");
+    setIsFeatured(!!p.is_featured);
+    setImageFile(null);
+    setImagePreview(p.cover_image || "");
   }
 
   async function savePost() {
     setSaving(true);
+
+    let uploadedImageUrl = coverImage;
+
+    // Upload image if a new file was selected
+    if (imageFile) {
+      setUploading(true);
+      const fileName = `${Date.now()}_${imageFile.name}`;
+
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from("cover_images")
+        .upload(fileName, imageFile);
+
+      if (uploadError) {
+        console.error("Upload failed:", uploadError.message);
+        showMessage("Failed to upload image: " + uploadError.message, "error");
+        setSaving(false);
+        setUploading(false);
+        return;
+      }
+
+      const { data: publicData } = supabase.storage
+        .from("cover_images")
+        .getPublicUrl(fileName);
+
+      uploadedImageUrl = publicData.publicUrl;
+      setUploading(false);
+    }
+
     const payload = {
+      author_id: "76e8151a-205a-4291-9f0c-a08a26c41f46",
       title,
       slug: slug || slugify(title),
       category,
-      excerpt,
-      cover_url: coverUrl,
       content,
-      published,
+      cover_image: uploadedImageUrl,
+      layout_type: layoutType,
+      status,
+      is_featured: isFeatured,
+      reading_time: readingTime(content),
+      published_at: status === "published" ? new Date().toISOString() : null,
       updated_at: new Date().toISOString(),
     };
 
     let result;
     if (selectedId) {
-      result = await supabase.from("posts").update(payload).eq("id", selectedId).select().single();
+      result = await supabase.from("blogs").update(payload).eq("id", selectedId).select().single();
     } else {
       result = await supabase
-        .from("posts")
+        .from("blogs")
         .insert({ ...payload, created_at: new Date().toISOString() })
         .select()
         .single();
     }
 
-    if (!result.error && result.data) {
+    if (result.error) {
+      console.error("Save failed:", result.error);
+      showMessage("Failed to save post: " + result.error.message, "error");
+    } else if (result.data) {
       await loadPosts();
       editPost(result.data);
+      setImageFile(null); // Clear the file input after successful save
+      showMessage("Post saved successfully!", "success");
     }
+
     setSaving(false);
   }
 
@@ -113,9 +204,14 @@ export default function EditorPage() {
     if (!id) return;
     const ok = confirm("Delete this post?");
     if (!ok) return;
-    await supabase.from("posts").delete().eq("id", id);
-    await loadPosts();
-    if (selectedId === id) resetForm();
+    const { error } = await supabase.from("blogs").delete().eq("id", id);
+    if (error) {
+      showMessage("Failed to delete post: " + error.message, "error");
+    } else {
+      showMessage("Post deleted successfully!", "error");
+      await loadPosts();
+      if (selectedId === id) resetForm();
+    }
   }
 
   const filtered = useMemo(() => {
@@ -126,6 +222,14 @@ export default function EditorPage() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* Message Toast */}
+      {message.text && (
+        <div className={`fixed bottom-8 right-10 px-6 py-3 rounded-lg shadow-lg text-white font-medium z-50 transition-all ${message.type === "success" ? "bg-green-600" : "bg-red-600"
+          }`}>
+          {message.text}
+        </div>
+      )}
+
       <div className="md:col-span-1">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-lg font-semibold">Posts</h2>
@@ -163,53 +267,89 @@ export default function EditorPage() {
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-1">Title</label>
-              <input className="w-full border rounded px-3 py-2" value={title} onChange={(e)=>setTitle(e.target.value)} placeholder="Post title" />
+              <label className="block text-sm font-medium mb-1">Title *</label>
+              <input className="w-full border rounded px-3 py-2" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Post title" />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Slug</label>
-              <input className="w-full border rounded px-3 py-2" value={slug} onChange={(e)=>setSlug(e.target.value)} placeholder="post-slug" />
+              <label className="block text-sm font-medium mb-1">Slug *</label>
+              <input className="w-full border rounded px-3 py-2" value={slug} onChange={(e) => setSlug(e.target.value)} placeholder="post-slug" />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-1">Category</label>
-              <select className="w-full border rounded px-3 py-2" value={category} onChange={(e)=>setCategory(e.target.value)}>
+              <label className="block text-sm font-medium mb-1">Category *</label>
+              <select className="w-full border rounded px-3 py-2" value={category} onChange={(e) => setCategory(e.target.value)}>
                 {categories.map(c => (
                   <option key={c.slug} value={c.slug}>{c.name}</option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Cover Image URL</label>
-              <input className="w-full border rounded px-3 py-2" value={coverUrl} onChange={(e)=>setCoverUrl(e.target.value)} placeholder="https://…" />
+              <label className="block text-sm font-medium mb-1">Status</label>
+              <select className="w-full border rounded px-3 py-2" value={status} onChange={(e) => setStatus(e.target.value)}>
+                {statuses.map(s => (
+                  <option key={s.value} value={s.value}>{s.name}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Layout Type</label>
+              <select className="w-full border rounded px-3 py-2" value={layoutType} onChange={(e) => setLayoutType(e.target.value)}>
+                {layoutTypes.map(l => (
+                  <option key={l.value} value={l.value}>{l.name}</option>
+                ))}
+              </select>
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Excerpt</label>
-            <textarea className="w-full border rounded px-3 py-2 min-h-24" value={excerpt} onChange={(e)=>setExcerpt(e.target.value)} placeholder="Short summary" />
+            <label className="block text-sm font-medium mb-1">Cover Image</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageSelect}
+              className="w-full border rounded px-3 py-2"
+            />
+            {imagePreview && (
+              <div className="mt-3">
+                <p className="text-sm text-gray-600 mb-2">Preview:</p>
+                <img
+                  src={imagePreview}
+                  alt="Cover preview"
+                  className="w-full max-w-md h-48 object-cover rounded border"
+                />
+              </div>
+            )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Content</label>
+            <label className="block text-sm font-medium mb-1">Content *</label>
             <RichTextEditor value={content} onChange={setContent} placeholder="Write your story…" />
+            {content && (
+              <div className="mt-2 text-sm text-gray-600">
+                Estimated reading time: <span className="font-medium">{readingTime(content)}</span>
+              </div>
+            )}
           </div>
 
           <div className="flex items-center justify-between">
             <label className="flex items-center gap-2 text-sm">
-              <input type="checkbox" checked={published} onChange={(e)=>setPublished(e.target.checked)} />
-              Published
+              <input type="checkbox" checked={isFeatured} onChange={(e) => setIsFeatured(e.target.checked)} />
+              Featured Post
             </label>
             <div className="flex items-center gap-2">
               {selectedId && (
-                <button className="px-3 py-2 rounded border border-red-500 text-red-600 hover:bg-red-50" onClick={()=>deletePost(selectedId)}>
+                <button className="px-3 py-2 rounded border border-red-500 text-red-600 hover:bg-red-50" onClick={() => deletePost(selectedId)}>
                   Delete
                 </button>
               )}
-              <button disabled={saving} className="px-4 py-2 rounded bg-gray-900 text-white hover:bg-black disabled:opacity-60" onClick={savePost}>
-                {saving ? 'Saving…' : 'Save'}
+              <button
+                disabled={saving || uploading}
+                className="px-4 py-2 rounded bg-gray-900 text-white hover:bg-black disabled:opacity-60"
+                onClick={savePost}
+              >
+                {uploading ? 'Uploading…' : saving ? 'Saving…' : 'Save'}
               </button>
             </div>
           </div>

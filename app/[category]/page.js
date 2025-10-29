@@ -28,7 +28,7 @@ export default async function BlogPage({ params }) {
                         <Link href={`/${category}/${p.slug}`} className="flex gap-5 p-5 items-start group">
                             <div className="w-32 h-24 flex-shrink-0 rounded-md overflow-hidden bg-gray-100">
                                 <img
-                                   src={`https://ogwaodgxdsnxjjkfmujm.supabase.co/storage/v1/object/public/cover_images/${p.cover_image}`}
+                                   src={`${p.cover_image}`}
                                     alt={p.title}
                                     className="w-full h-full object-cover"
                                     loading="lazy"
