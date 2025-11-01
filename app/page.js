@@ -111,7 +111,7 @@ export default async function Home() {
       {/* Trending Section */}
       <section className="flex py-5 overflow-hidden ">
         <div className="w-full flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-5">
-          <div className="heading-1 text-gray-900 mb-3 sm:mb-0 sm:mr-6 flex-shrink-0">Trandings</div>
+          <div className="heading-1 text-gray-900 mb-3 sm:mb-0 sm:mr-6 flex-shrink-0">Trendings</div>
           <div className="flex gap-4 sm:gap-2 flex-1 overflow-x-auto sm:overflow-x-visible pb-2 snap-x snap-mandatory sm:snap-none webkit-overflow-scrolling-touch scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-400">
             {trendingStories.map((story, idx) => (
               <Link key={idx} href={`/${story.category}/${story.slug}`}>
