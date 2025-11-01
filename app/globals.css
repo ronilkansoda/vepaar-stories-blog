@@ -42,6 +42,16 @@ body {
 .font-serif {
   font-family: 'Charter', Georgia, serif;
 }
+/* Explicit Roboto utility for headlines when needed */
+.font-roboto {
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Fine-tune spacing for titles */
+.ws-medium {
+  /* Slightly increased word spacing for improved readability */
+  word-spacing: 0.01em;
+}
 
 /* -------------------------------------
    Typography scale (site-wide)

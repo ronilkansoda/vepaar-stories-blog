@@ -1,6 +1,5 @@
 import React from "react";
 import { supabase } from "@/lib/supabaseClient";
-// import UploadTester from "./UploadTester";
 
 export default async function PostPage({ params }) {
     const { slug } = params;
@@ -28,10 +27,9 @@ export default async function PostPage({ params }) {
 
     return (
         <article className="max-w-3xl mx-auto px-1 py-6 sm:px-6 sm:py-10 font-serif">
-            {/* <UploadTester /> */}
             <div className="mb-8 sm:mb-12">
-                <h1 className="text-3xl sm:text-5xl font-normal leading-tight mb-4 sm:mb-8 text-gray-800">{data.title}</h1>
-                <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-200">
+                <h1 className="text-4xl sm:text-6xl font-bold tracking-tight ws-medium mb-4 sm:mb-8 text-gray-900 font-roboto">{data.title}</h1>
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-start sm:justify-between gap-3 sm:gap-0 mb-8 pb-4 border-b border-gray-200">
                     <div className="flex items-center gap-3">
                         <div>
                             <img src={`https://ogwaodgxdsnxjjkfmujm.supabase.co/storage/v1/object/public/profile_images/${author?.profile_image}`} alt={author?.name || "Author"} className="w-10 h-10 rounded-full object-cover" />
@@ -40,8 +38,9 @@ export default async function PostPage({ params }) {
                             <div className="text-base font-medium text-gray-800">{author?.name || "Unknown"}</div>
                         </div>
                     </div>
-                    <div className="flex items-center gap-4 text-gray-500 text-sm">
+                    <div className="flex items-center gap-2 sm:gap-4 text-gray-500 text-sm mt-1 sm:mt-0">
                         <span>{data.reading_time} read</span>
+                        <span className="sm:hidden">•</span>
                         <span>{new Date(data.published_at).toLocaleDateString()}</span>
                     </div>
                 </div>
