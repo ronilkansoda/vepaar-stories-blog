@@ -1,6 +1,5 @@
 import React from "react";
 import { supabase } from "@/lib/supabaseClient";
-// import UploadTester from "./UploadTester";
 
 export default async function PostPage({ params }) {
     const { slug } = params;
@@ -28,7 +27,6 @@ export default async function PostPage({ params }) {
 
     return (
         <article className="max-w-3xl mx-auto px-1 py-6 sm:px-6 sm:py-10 font-serif">
-            {/* <UploadTester /> */}
             <div className="mb-8 sm:mb-12">
                 <h1 className="text-4xl sm:text-6xl font-bold tracking-tight ws-medium mb-4 sm:mb-8 text-gray-900 font-roboto">{data.title}</h1>
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-start sm:justify-between gap-3 sm:gap-0 mb-8 pb-4 border-b border-gray-200">

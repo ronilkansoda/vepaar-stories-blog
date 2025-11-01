@@ -12,7 +12,8 @@ export default async function BlogPage({ params }) {
         .select("title,slug,cover_image,content,published_at,is_featured,views")
         .eq("status", "published")
         .eq("category", category)
-        .order("published_at", { ascending: false });
+        .order("published_at", { ascending: false })
+        .limit(8);
 
     if (error) {
         return <div className="max-w-4xl mx-auto px-6 py-8">Error loading blogs.</div>;
@@ -28,7 +29,7 @@ export default async function BlogPage({ params }) {
                         <Link href={`/${category}/${p.slug}`} className="flex flex-col sm:flex-row gap-4 sm:gap-5 p-4 sm:p-5 items-start group">
                             <div className="w-full h-40 sm:w-32 sm:h-24 flex-shrink-0 rounded-md overflow-hidden bg-gray-100">
                                 <img
-                                   src={`${p.cover_image}`}
+                                    src={`${p.cover_image}`}
                                     alt={p.title}
                                     className="w-full h-full object-cover"
                                     loading="lazy"
