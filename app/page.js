@@ -1,102 +1,115 @@
-"use client";
-import React, { useEffect, useState } from "react";
 import StoryHero from "../components/StoryHero";
 import StorySidebar from "../components/StorySidebar";
+import FeaturedSection from "../components/FeaturedSection";
 import { supabase } from "../lib/supabaseClient";
 import Link from "next/link";
 
-export default function Home() {
-  const year = new Date().getFullYear();
-  // Data for Top Picks Section
-  const [trendingStories, setTrendingStories] = useState([]);
-  const [bigFeatured, setBigFeatured] = useState([]);
-  const [sidebarStories, setSidebarStories] = useState([]);
-  const [moreStories, setMoreStories] = useState([]);
+export default async function Home() {
+  let trendingStories = [];
+  let bigFeatured = [];
+  let sidebarStories = [];
+  let bigFeatured2 = [];
+  let sidebarStories2 = [];
+  let moreStories = [];
 
-  useEffect(() => {
-    const fetchBlogs = async () => {
-      // Trending: 3 blogs
-      const { data: trending, error: trendingError } = await supabase
+  try {
+    // Fetch all required blog groups on the server in parallel
+    const [
+      // trending + big blogs (content-heavy)
+      { data: contentRich, error: contentRichError },
+      // standard posts for both sidebars (first 6)
+      { data: standardFirstSix, error: standardSixError },
+      // more section (existing data source)
+      { data: moreblogs, error: moreblogsError },
+    ] = await Promise.all([
+      // Fetch both big_blog and trending in one query, then split and slice
+      supabase
         .from("blogs")
-        .select("title,cover_image,content,category,slug")
-        .eq("layout_type", "trending")
+        .select("title,cover_image,content,category,slug,layout_type")
+        .in("layout_type", ["big_blog", "trending"])
         .eq("status", "published")
-        .order("published_at", { ascending: false })
-        .limit(3);
-
-      const { data: bigFeatured, error: bigFeaturedError } = await supabase
-        .from("blogs")
-        .select("title,cover_image,content,category,slug")
-        .eq("layout_type", "big_blog")
-        .eq("status", "published")
-        .order("published_at", { ascending: false })
-        .limit(1);
-
-      // Sidebar: 4 blogs
-      const { data: sidebar, error: sidebarError } = await supabase
+        .order("published_at", { ascending: false }),
+      // Get first 6 standard posts to feed both sidebars
+      supabase
         .from("blogs")
         .select("title,cover_image,category,slug")
         .eq("layout_type", "standard")
         .eq("status", "published")
         .order("published_at", { ascending: false })
-        .limit(3);
-
-      const { data: moreblogs, error: moreblogsError } = await supabase
+        .limit(6),
+      supabase
         .from("blogs")
         .select("title,cover_image,category,slug")
         .eq("layout_type", "standard")
-        .eq("status", "published");
+        .eq("status", "published"),
+    ]);
 
-      if (trendingError) console.error("Supabase trending error:", trendingError);
-      if (sidebarError) console.error("Supabase sidebar error:", sidebarError);
-      if (bigFeaturedError) console.error("Supabase big featured error:", bigFeaturedError);
-      if (moreblogsError) console.error("Supabase more blogs error:", moreblogsError);
+    if (contentRichError) console.error("Supabase contentRich error:", contentRichError);
+    if (standardSixError) console.error("Supabase standardSix error:", standardSixError);
+    if (moreblogsError) console.error("Supabase more blogs error:", moreblogsError);
 
-      setTrendingStories(
-        (trending || []).map(b => ({
-          title: b.title,
-          image: b.cover_image,
-          caption: b.title,
-          category: b.category,
-          slug: b.slug
-        }))
-      );
-      setBigFeatured(
-        (bigFeatured || []).map(b => ({
-          title: b.title,
-          image: b.cover_image,
-          caption: b.title,
-          category: b.category,
-          slug: b.slug
-        }))
-      );
-      setSidebarStories(
-        (sidebar || []).map(b => ({
-          title: b.title,
-          image: b.cover_image,
-          category: b.category,
-          slug: b.slug
-        }))
-      );
-      setMoreStories(
-        (moreblogs || []).map(b => ({
-          title: b.title,
-          image: b.cover_image,
-          category: b.category,
-          slug: b.slug
-        }))
-      );
-    };
-    fetchBlogs();
-  }, []);
+    const bigBlogs = (contentRich || []).filter((b) => b.layout_type === "big_blog")
+      .slice(0, 2);
+    const trending = (contentRich || []).filter((b) => b.layout_type === "trending")
+      .slice(0, 3);
+
+    trendingStories = (trending || []).map((b) => ({
+      title: b.title,
+      image: b.cover_image,
+      caption: b.title,
+      category: b.category,
+      slug: b.slug,
+    }));
+
+    bigFeatured = (bigBlogs.slice(0, 1) || []).map((b) => ({
+      title: b.title,
+      image: b.cover_image,
+      caption: b.title,
+      category: b.category,
+      slug: b.slug,
+      content: b.content,
+    }));
+
+    bigFeatured2 = (bigBlogs.slice(1, 2) || []).map((b) => ({
+      title: b.title,
+      image: b.cover_image,
+      caption: b.title,
+      category: b.category,
+      slug: b.slug,
+      content: b.content,
+    }));
+
+    sidebarStories = (standardFirstSix?.slice(0, 3) || []).map((b) => ({
+      title: b.title,
+      image: b.cover_image,
+      category: b.category,
+      slug: b.slug,
+    }));
+
+    sidebarStories2 = (standardFirstSix?.slice(3, 6) || []).map((b) => ({
+      title: b.title,
+      image: b.cover_image,
+      category: b.category,
+      slug: b.slug,
+    }));
+
+    moreStories = (moreblogs || []).map((b) => ({
+      title: b.title,
+      image: b.cover_image,
+      category: b.category,
+      slug: b.slug,
+    }));
+  } catch (e) {
+    console.error('Home SSR fetch failed:', e);
+  }
 
   const leftStories = moreStories.slice(0, 4);
   const rightStories = moreStories.slice(4, 8);
 
   return (
-    <div className="max-w-5xl mx-auto px-5 py-7">
+    <div className="max-w-5xl mx-auto px-5 py-2 md:py-7">
       {/* Trending Section */}
-      <section className="flex py-5 overflow-hidden border-b border-gray-300">
+      <section className="flex py-5 overflow-hidden ">
         <div className="w-full flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-5">
           <div className="heading-1 text-gray-900 mb-3 sm:mb-0 sm:mr-6 flex-shrink-0">Trandings</div>
           <div className="flex gap-4 sm:gap-2 flex-1 overflow-x-auto sm:overflow-x-visible pb-2 snap-x snap-mandatory sm:snap-none webkit-overflow-scrolling-touch scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-400">
@@ -112,13 +125,20 @@ export default function Home() {
         </div>
       </section>
 
+      <div className="my-8 sm:my-12 border-t border-gray-200"></div>
+
       {/* Main Content Grid */}
-      <main className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-10 mt-6 md:mt-8 items-start">
-        <div className="order-1">
-          <StoryHero story={bigFeatured} />
-        </div>
-        <StorySidebar items={sidebarStories} />
-      </main>
+      <FeaturedSection hero={bigFeatured} sidebar={sidebarStories} />
+
+      {/* Divider & Spacing */}
+      {(bigFeatured2.length > 0 || sidebarStories2.length > 0) && (
+        <div className="my-12 border-t border-gray-200"></div>
+      )}
+
+      {/* Flipped Main Content Grid (desktop only flips; mobile order stays same) */}
+      {(bigFeatured2.length > 0 || sidebarStories2.length > 0) && (
+        <FeaturedSection hero={bigFeatured2} sidebar={sidebarStories2} flip />
+      )}
 
       {/* Section Two */}
       <section className="mt-8 pt-7">
@@ -129,7 +149,7 @@ export default function Home() {
           <div>
             {leftStories.map((story, idx) => (
               <Link
-                href={`/story/${story.slug}`}
+                href={`/${story.category}/${story.slug}`}
                 key={idx}
                 className="flex gap-3.5 py-3 border-t border-gray-200 items-center"
               >
@@ -144,10 +164,10 @@ export default function Home() {
           </div>
 
           {/* Right Column */}
-          <div>
+          <div className="hidden md:block">
             {rightStories.map((story, idx) => (
               <Link
-                href={`/story/${story.slug}`}
+                href={`/${story.category}/${story.slug}`}
                 key={idx}
                 className="flex gap-3.5 py-3 border-t border-gray-200 items-center"
               >

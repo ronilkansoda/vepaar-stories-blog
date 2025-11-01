@@ -1,6 +1,4 @@
-"use client";
 import Link from "next/link";
-import { useState, useEffect } from "react";
 
 const categories = [
   { name: "Business Stories", slug: "business_stories" },
@@ -12,76 +10,16 @@ const categories = [
 ];
 
 export default function Header() {
-  const [currentTime, setCurrentTime] = useState('');
-  const [hasScrolled, setHasScrolled] = useState(false); // controls shadow on sticky nav
-  const [showTopBar, setShowTopBar] = useState(true); // controls visibility of top logo/date section
-
-  useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      const options = {
-        weekday: 'short',
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-      };
-      setCurrentTime(now.toLocaleDateString('en-US', options));
-    };
-
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    // Smooth, flicker-free scroll handling using rAF + hysteresis
-    const HIDE_AFTER = 120; // hide top bar after scrolling past this
-    const SHOW_BEFORE = 40; // show top bar only when near top again
-
-    let lastY = 0;
-    let ticking = false;
-
-    const updateOnScroll = () => {
-      // Shadow for the sticky nav
-      setHasScrolled(lastY > 10);
-
-      // Hysteresis: avoid rapid toggling around a single threshold
-      setShowTopBar(prev => {
-        if (prev) {
-          // currently visible; only hide when clearly past HIDE_AFTER
-          if (lastY > HIDE_AFTER) return false;
-          return prev;
-        } else {
-          // currently hidden; only show again when clearly above top
-          if (lastY < SHOW_BEFORE) return true;
-          return prev;
-        }
-      });
-
-      ticking = false;
-    };
-
-    const onScroll = () => {
-      lastY = window.scrollY || 0;
-      if (!ticking) {
-        window.requestAnimationFrame(updateOnScroll);
-        ticking = true;
-      }
-    };
-
-    // Initialize with current position and attach listener
-    lastY = typeof window !== 'undefined' ? window.scrollY || 0 : 0;
-    updateOnScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  const currentTime = new Date().toLocaleDateString('en-US', {
+    weekday: 'short',
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
 
   return (
-    <header className={`sticky top-0 z-50 w-full border-b border-gray-300 bg-white/95 backdrop-blur-sm transition-shadow duration-300 ${hasScrolled ? 'shadow-md' : ''
-      }`}>
-      <div className={`bg-white overflow-hidden transition-all duration-500 ease-in-out ${
-        showTopBar ? 'max-h-[200px] opacity-100' : 'max-h-0 opacity-0'
-        }`}>
+    <header className={"sticky top-0 z-50 w-full border-b border-gray-300 bg-white/95 backdrop-blur-sm"}>
+      <div className="bg-white">
         <div className="max-w-5xl mx-auto flex items-center justify-between py-3 md:py-5 px-3 md:px-5">
           {/* Left side - Date/Time (hidden on mobile) */}
           <div className="flex items-center gap-3">
@@ -95,8 +33,8 @@ export default function Header() {
             <Link href="/" className="font-extrabold text-red-600 text-2xl md:text-4xl tracking-tighter no-underline hover:text-red-700 transition-colors">VEPAAR STORIES</Link>
           </div>
 
-          {/* Right side - Actions */}
-          <div className="flex items-center gap-2 md:gap-3">
+          {/* Right side - Actions (hidden on mobile, visible on laptops/desktops) */}
+          <div className="hidden lg:flex items-center gap-2 md:gap-3">
             <button className="border border-gray-900 bg-white text-gray-900 py-1.5 px-2.5 md:py-2 md:px-3.5 rounded text-sm md:text-base cursor-pointer transition-all hover:bg-gray-900 hover:text-white">Sign In</button>
           </div>
         </div>
@@ -104,7 +42,7 @@ export default function Header() {
 
       {/* Navigation - Responsive */}
       <nav className="bg-white border-t border-gray-300">
-        <div className="py-2 md:py-3 px-3 md:px-5">
+        <div className="md:py-3 px-3 md:px-5">
           {/* Desktop Navigation */}
           <ul className="hidden md:flex list-none gap-7 p-0 m-0 justify-center text-base">
             {categories.map((cat) => (
@@ -118,14 +56,19 @@ export default function Header() {
               </li>
             ))}
           </ul>
-          {/* Mobile Navigation - Scrollable  */}
-          <div className="md:hidden overflow-x-auto">
-            <ul className="flex list-none justify-center gap-4 p-0 m-0 text-sm whitespace-nowrap">
+          {/* Mobile Navigation - hidden per request */}
+          <div className="hidden relative -mx-3 px-3" aria-hidden="true">
+            {/* optional label */}
+            <div className="text-[11px] uppercase tracking-wide text-gray-500 mb-1 px-1">Categories</div>
+            {/* edge fade hints */}
+            <div aria-hidden className="pointer-events-none absolute left-0 top-7 h-9 w-6 bg-gradient-to-r from-white to-transparent"></div>
+            <div aria-hidden className="pointer-events-none absolute right-0 top-7 h-9 w-6 bg-gradient-to-l from-white to-transparent"></div>
+            <ul className="flex list-none gap-2 p-0 m-0 text-sm whitespace-nowrap overflow-x-auto pb-1 snap-x snap-mandatory scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
               {categories.map((cat) => (
-                <li key={cat.slug} className="flex-shrink-0">
+                <li key={cat.slug} className="flex-shrink-0 snap-start">
                   <Link
                     href={`/${cat.slug}`}
-                    className="cursor-pointer text-[14px] text-gray-600 font-medium transition-colors hover:text-gray-900"
+                    className="inline-block rounded-full border border-gray-200 bg-white px-3 py-1 text-[13px] text-gray-700 shadow-sm transition-colors hover:bg-gray-50"
                   >
                     {cat.name}
                   </Link>
