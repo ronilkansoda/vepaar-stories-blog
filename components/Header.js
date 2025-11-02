@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useState, useEffect } from "react";
 
 const categories = [
   { name: "Business Stories", slug: "business_stories" },
@@ -10,6 +13,51 @@ const categories = [
 ];
 
 export default function Header() {
+  const [showTopBar, setShowTopBar] = useState(true);
+  const [hasScrolled, setHasScrolled] = useState(false);
+
+  useEffect(() => {
+    const HIDE_AFTER = 120; // hide top bar after scrolling past this
+    const SHOW_BEFORE = 40; // show top bar only when near top again
+
+    let lastY = 0;
+    let ticking = false;
+
+    const updateOnScroll = () => {
+      // Shadow for the sticky nav
+      setHasScrolled(lastY > 10);
+
+      // Hysteresis: avoid rapid toggling around a single threshold
+      setShowTopBar(prev => {
+        if (prev) {
+          // currently visible; only hide when clearly past HIDE_AFTER
+          if (lastY > HIDE_AFTER) return false;
+          return prev;
+        } else {
+          // currently hidden; only show again when clearly above top
+          if (lastY < SHOW_BEFORE) return true;
+          return prev;
+        }
+      });
+
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      lastY = window.scrollY || 0;
+      if (!ticking) {
+        window.requestAnimationFrame(updateOnScroll);
+        ticking = true;
+      }
+    };
+
+    // Initialize with current position and attach listener
+    lastY = typeof window !== 'undefined' ? window.scrollY || 0 : 0;
+    updateOnScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   const currentTime = new Date().toLocaleDateString('en-US', {
     weekday: 'short',
     year: 'numeric',
@@ -18,8 +66,8 @@ export default function Header() {
   });
 
   return (
-    <header className={"sticky top-0 z-50 w-full border-b border-gray-300 bg-white/95 backdrop-blur-sm"}>
-      <div className="bg-white">
+    <header className={`sticky top-0 z-50 w-full border-b border-gray-300 bg-white/95 backdrop-blur-sm transition-shadow duration-200 ${hasScrolled ? 'shadow-md' : ''}`}>
+      <div className={`bg-white transition-all duration-300 overflow-hidden ${showTopBar ? 'max-h-24 opacity-100' : 'max-h-0 opacity-0'}`}>
         <div className="max-w-5xl mx-auto flex items-center justify-between py-3 md:py-5 px-3 md:px-5">
           {/* Left side - Date/Time (hidden on mobile) */}
           <div className="flex items-center gap-3">
