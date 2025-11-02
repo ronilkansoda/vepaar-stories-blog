@@ -78,7 +78,7 @@ export default function Header() {
 
           {/* Center - Logo */}
           <div className="flex-1 md:flex-none text-center">
-            <Link href="/" className="font-extrabold text-red-600 text-2xl md:text-4xl tracking-tighter no-underline hover:text-red-700 transition-colors">VEPAAR STORIES</Link>
+            <Link href="/" className="font-extrabold text-red-600 text-2xl md:text-4xl tracking-tighter no-underline hover:text-red-700 transition-colors">VEPAR STORIES</Link>
           </div>
 
           {/* Right side - Actions (hidden on mobile, visible on laptops/desktops) */}

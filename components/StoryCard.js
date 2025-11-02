@@ -1,16 +1,18 @@
 // StoryCard.js
 import Link from "next/link";
+import Image from "next/image";
 
 export default function StoryCard({ story }) {
   return (
     <div className="border border-gray-200 rounded-lg hover:shadow-md transition-shadow overflow-hidden">
       <Link href={`/${story.category}/story/${story.slug}`} className="flex gap-5 p-5 items-start group">
-        <div className="w-32 h-24 flex-shrink-0 rounded-md overflow-hidden bg-gray-100">
-          <img
+        <div className="w-32 h-24 flex-shrink-0 rounded-md overflow-hidden bg-gray-100 relative">
+          <Image
             src={`https://ogwaodgxdsnxjjkfmujm.supabase.co/storage/v1/object/public/cover_images/${story.image}`}
             alt={story.title}
-            className="w-full h-full object-cover"
-            loading="lazy"
+            fill
+            sizes="128px"
+            className="object-cover"
           />
         </div>
         <div className="flex-1 min-w-0">

@@ -13,7 +13,7 @@ export default function Footer() {
         <div className="mb-8 sm:mb-10 lg:mb-12">
           <div className="block mb-4">
             <h3 className="heading-hero tracking-tight text-gray-900">
-              VEPAAR STORIES
+              VEPAR STORIES
             </h3>
           </div>
           <p className="text-sm sm:text-base text-gray-600 leading-relaxed max-w-3xl">
@@ -115,7 +115,7 @@ export default function Footer() {
       <div className="border-t border-gray-200">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 py-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-600">
-            <p>&copy; {year} Vepaar Stories. All rights reserved.</p>
+            <p>&copy; {year} Vepar Stories. All rights reserved.</p>
             <p className="text-xs">
               Made with ❤️ for entrepreneurs and business leaders
             </p>
