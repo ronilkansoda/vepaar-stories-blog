@@ -3,6 +3,72 @@ import StorySidebar from "../components/StorySidebar";
 import FeaturedSection from "../components/FeaturedSection";
 import { supabase } from "../lib/supabaseClient";
 import Link from "next/link";
+import Image from "next/image";
+
+const BASE_URL = (process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000").replace(/\/$/, "");
+
+export const metadata = {
+  title: "Vepar Stories — Business & Finance Tips for Entrepreneurs",
+  description: "Discover practical business tips, financial advice, and entrepreneurship strategies. Learn from real stories and expert insights to grow your business successfully.",
+  keywords: [
+    "business tips",
+    "financial advice",
+    "entrepreneurship",
+    "startup guide",
+    "business growth",
+    "finance tips",
+    "leadership",
+    "productivity",
+    "business stories",
+    "Vepar Stories"
+  ],
+  authors: [{ name: "Vepar Stories Team" }],
+  creator: "Vepar Stories",
+  publisher: "Vepar Stories",
+  metadataBase: new URL(BASE_URL),
+  alternates: {
+    canonical: BASE_URL,
+  },
+  openGraph: {
+    title: "Vepar Stories — Business & Finance Tips for Entrepreneurs",
+    description: "Discover practical business tips, financial advice, and entrepreneurship strategies. Learn from real stories and expert insights.",
+    url: BASE_URL,
+    siteName: "Vepar Stories",
+    locale: "en_US",
+    type: "website",
+    images: [
+      {
+        url: `${BASE_URL}/og-image.jpg`,
+        width: 1200,
+        height: 630,
+        alt: "Vepar Stories - Business & Finance Tips",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Vepar Stories — Business & Finance Tips",
+    description: "Practical business and financial tips for entrepreneurs and professionals.",
+    creator: "@veparstories",
+    images: [`${BASE_URL}/og-image.jpg`],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  verification: {
+    google: "your-google-verification-code",
+    // yandex: "your-yandex-verification-code",
+    // bing: "your-bing-verification-code",
+  },
+};
 
 export default async function Home() {
   let trendingStories = [];
@@ -116,7 +182,16 @@ export default async function Home() {
             {trendingStories.map((story, idx) => (
               <Link key={idx} href={`/${story.category}/${story.slug}`}>
                 <div className="min-w-[180px] w-[180px] md:min-w-[200px] md:w-[200px] font-semibold relative flex-shrink-0 snap-start sm:static">
-                  <img src={`${story.image}`} alt={`thumb${idx + 2}`} className="w-full h-24 md:h-28 object-cover rounded mb-2" />
+                  <div className="w-full h-24 md:h-28 relative rounded mb-2 overflow-hidden">
+                    <Image
+                      src={story.image}
+                      alt={story.caption}
+                      fill
+                      sizes="200px"
+                      className="object-cover"
+                      priority={idx < 2}
+                    />
+                  </div>
                   <div className="subheading mt-1.5">{story.caption}</div>
                 </div>
               </Link>
@@ -153,11 +228,15 @@ export default async function Home() {
                 key={idx}
                 className="flex gap-3.5 py-3 border-t border-gray-200 items-center"
               >
-                <img
-                  src={`${story.image}`}
-                  alt={story.title}
-                  className="w-36 h-24 object-cover rounded-md"
-                />
+                <div className="w-36 h-24 relative flex-shrink-0 rounded-md overflow-hidden">
+                  <Image
+                    src={story.image}
+                    alt={story.title}
+                    fill
+                    sizes="144px"
+                    className="object-cover"
+                  />
+                </div>
                 <div className="sidebar-subheading">{story.title}</div>
               </Link>
             ))}
@@ -171,11 +250,15 @@ export default async function Home() {
                 key={idx}
                 className="flex gap-3.5 py-3 border-t border-gray-200 items-center"
               >
-                <img
-                  src={`${story.image}`}
-                  alt={story.title}
-                  className="w-36 h-24 object-cover rounded-md"
-                />
+                <div className="w-36 h-24 relative flex-shrink-0 rounded-md overflow-hidden">
+                  <Image
+                    src={story.image}
+                    alt={story.title}
+                    fill
+                    sizes="144px"
+                    className="object-cover"
+                  />
+                </div>
                 <div className="sidebar-subheading">{story.title}</div>
               </Link>
             ))}

@@ -1,0 +1,14 @@
+# robots.txt for Vepar Stories Blog
+
+User-agent: *
+Allow: /
+
+# Disallow admin/editor pages
+Disallow: /editor
+Disallow: /api/
+
+# Sitemap location
+Sitemap: /sitemap.xml
+
+# Crawl-delay (optional, adjust if needed)
+Crawl-delay: 1
