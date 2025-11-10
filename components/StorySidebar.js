@@ -12,12 +12,12 @@ export default function StorySidebar({ items }) {
             <Link key={idx} href={`/${item.category}/${item.slug}`}>
               <div className="flex items-center justify-between gap-4 py-2 border-t border-gray-200">
                 <div className="flex-1 font-semibold sidebar-subheading">{item.title}</div>
-                <div className="w-38 h-24 relative flex-shrink-0 rounded-md overflow-hidden">
+                <div className="w-36 h-24 relative flex-shrink-0 rounded-md overflow-hidden">
                   <Image
                     src={item.image}
                     alt={item.title}
                     fill
-                    sizes="150px"
+                    sizes="96px"
                     className="object-cover"
                   />
                 </div>
