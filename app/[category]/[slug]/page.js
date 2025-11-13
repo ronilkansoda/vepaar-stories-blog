@@ -246,7 +246,7 @@ export default async function PostPage({ params }) {
                         />
                     </div>
                 )}
-                <div className="text-[16px] leading-relaxed text-gray-800 mb-14 sm:text-[18px] sm:mb-16 ql-editor">
+                <div className="text-[16px] leading-relaxed text-gray-800 mb-14 sm:text-[18px] sm:mb-16 blog-content">
                     <div dangerouslySetInnerHTML={{ __html: data.content }} />
                 </div>
 

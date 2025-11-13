@@ -4,72 +4,80 @@
 
 /* Add Quill editor styles in base layer so they survive Tailwind reset */
 @layer base {
-  .ql-editor h1 {
+  /* Styles for blog content (without ql-editor padding issues) */
+  .blog-content h1 {
     font-size: 2em;
     font-weight: bold;
     margin-top: 0.67em;
     margin-bottom: 0.67em;
   }
 
-  .ql-editor h2 {
+  .blog-content h2 {
     font-size: 1.5em;
     font-weight: bold;
     margin-top: 0.83em;
     margin-bottom: 0.83em;
   }
 
-  .ql-editor h3 {
+  .blog-content h3 {
     font-size: 1.3em;
     font-weight: bold;
     margin-top: 1em;
     margin-bottom: 1em;
   }
 
-  .ql-editor h4 {
+  .blog-content h4 {
     font-size: 1.1em;
     font-weight: bold;
     margin-top: 1.33em;
     margin-bottom: 1.33em;
   }
 
-  .ql-editor h5 {
+  .blog-content h5 {
     font-size: 1em;
     font-weight: bold;
     margin-top: 1.67em;
     margin-bottom: 1.67em;
   }
 
-  .ql-editor h6 {
+  .blog-content h6 {
     font-size: 0.9em;
     font-weight: bold;
     margin-top: 2.33em;
     margin-bottom: 2.33em;
   }
 
-  .ql-editor p {
+  .blog-content p {
     margin-bottom: 1em;
   }
 
-  .ql-editor ol,
-  .ql-editor ul {
+  .blog-content ol,
+  .blog-content ul {
     padding-left: 1.5em;
     margin-bottom: 1em;
   }
 
-  .ql-editor li {
+  .blog-content li {
     margin-bottom: 0.5em;
   }
 
-  .ql-editor strong {
+  .blog-content strong {
     font-weight: bold;
   }
 
-  .ql-editor em {
+  .blog-content em {
     font-style: italic;
   }
 
-  .ql-editor u {
+  .blog-content u {
     text-decoration: underline;
+  }
+
+  .blog-content blockquote {
+    border-left: 4px solid #000000;
+    padding-left: 20px;
+    margin: 1.5em 0;
+    font-style: italic;
   }
 }
 
