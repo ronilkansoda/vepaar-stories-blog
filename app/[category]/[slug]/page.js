@@ -34,8 +34,8 @@ export async function generateMetadata({ params }) {
         if (authorData) authorName = authorData.name;
     }
 
-    const metaDescription = data.description 
-        ? data.description.slice(0, 160) 
+    const metaDescription = data.description
+        ? data.description.slice(0, 160)
         : data.title.slice(0, 160);
 
     return {
@@ -142,7 +142,7 @@ export default async function PostPage({ params }) {
         author: {
             "@type": "Person",
             name: author?.name || "Vepar Stories Team",
-            image: author?.profile_image 
+            image: author?.profile_image
                 ? `https://ogwaodgxdsnxjjkfmujm.supabase.co/storage/v1/object/public/profile_images/${author.profile_image}`
                 : undefined,
         },
@@ -198,63 +198,63 @@ export default async function PostPage({ params }) {
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
             />
             <article className="max-w-3xl mx-auto px-1 py-6 sm:px-6 sm:py-10 font-serif">
-            {/* Breadcrumbs */}
-            <Breadcrumbs
-                items={[
-                    { label: "Home", href: "/" },
-                    {
-                        label: category.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
-                        href: `/${category}`,
-                    },
-                    { label: data.title },
-                ]}
-            />
-            <div className="mb-8 sm:mb-12">
-                <h1 className="text-4xl sm:text-6xl font-bold mb-4 sm:mb-8 text-gray-900 font-roboto">{data.title}</h1>
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-start sm:justify-between gap-3 sm:gap-0 mb-8 pb-4 border-b border-gray-200">
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 relative rounded-full overflow-hidden">
-                            <Image
-                                src={`https://ogwaodgxdsnxjjkfmujm.supabase.co/storage/v1/object/public/profile_images/${author?.profile_image}`}
-                                alt={author?.name || "Author"}
-                                fill
-                                sizes="40px"
-                                className="object-cover"
-                            />
+                {/* Breadcrumbs */}
+                <Breadcrumbs
+                    items={[
+                        { label: "Home", href: "/" },
+                        {
+                            label: category.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
+                            href: `/${category}`,
+                        },
+                        { label: data.title },
+                    ]}
+                />
+                <div className="mb-8 sm:mb-12">
+                    <h1 className="text-4xl sm:text-6xl font-bold mb-4 sm:mb-8 text-gray-900 font-roboto">{data.title}</h1>
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-start sm:justify-between gap-3 sm:gap-0 mb-8 pb-4 border-b border-gray-200">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 relative rounded-full overflow-hidden">
+                                <Image
+                                    src={`https://ogwaodgxdsnxjjkfmujm.supabase.co/storage/v1/object/public/profile_images/${author?.profile_image}`}
+                                    alt={author?.name || "Author"}
+                                    fill
+                                    sizes="40px"
+                                    className="object-cover"
+                                />
+                            </div>
+                            <div className="flex items-center gap-4">
+                                <div className="text-base font-medium text-gray-800">{author?.name || "Unknown"}</div>
+                            </div>
                         </div>
-                        <div className="flex items-center gap-4">
-                            <div className="text-base font-medium text-gray-800">{author?.name || "Unknown"}</div>
+                        <div className="flex items-center gap-2 sm:gap-4 text-gray-500 text-sm mt-1 sm:mt-0">
+                            <span>{data.reading_time} read</span>
+                            <span className="sm:hidden">•</span>
+                            <span>{new Date(data.published_at).toLocaleDateString()}</span>
                         </div>
                     </div>
-                    <div className="flex items-center gap-2 sm:gap-4 text-gray-500 text-sm mt-1 sm:mt-0">
-                        <span>{data.reading_time} read</span>
-                        <span className="sm:hidden">•</span>
-                        <span>{new Date(data.published_at).toLocaleDateString()}</span>
+                </div>
+                {/* Cover image if present */}
+                {data.cover_image && (
+                    <div className="mb-10 relative w-full h-80 rounded overflow-hidden">
+                        <Image
+                            src={data.cover_image}
+                            alt={data.title}
+                            fill
+                            sizes="(max-width: 768px) 100vw, 768px"
+                            className="object-cover"
+                            priority
+                        />
                     </div>
+                )}
+                <div className="text-[16px] leading-relaxed text-gray-800 mb-14 sm:text-[18px] sm:mb-16 ql-editor">
+                    <div dangerouslySetInnerHTML={{ __html: data.content }} />
                 </div>
-            </div>
-            {/* Cover image if present */}
-            {data.cover_image && (
-                <div className="mb-10 relative w-full h-80 rounded overflow-hidden">
-                    <Image
-                        src={data.cover_image}
-                        alt={data.title}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 768px"
-                        className="object-cover"
-                        priority
-                    />
-                </div>
-            )}
-            <div className="text-[16px] leading-relaxed text-gray-800 mb-14 sm:text-[18px] sm:mb-16">
-                <div dangerouslySetInnerHTML={{ __html: data.content }} />
-            </div>
 
-            {/* Related Articles */}
-            {relatedArticles && relatedArticles.length > 0 && (
-                <RelatedArticles articles={relatedArticles} currentSlug={slug} />
-            )}
-        </article>
+                {/* Related Articles */}
+                {relatedArticles && relatedArticles.length > 0 && (
+                    <RelatedArticles articles={relatedArticles} currentSlug={slug} />
+                )}
+            </article>
         </>
     );
 }

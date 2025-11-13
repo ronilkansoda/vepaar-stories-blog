@@ -2,6 +2,77 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Add Quill editor styles in base layer so they survive Tailwind reset */
+@layer base {
+  .ql-editor h1 {
+    font-size: 2em;
+    font-weight: bold;
+    margin-top: 0.67em;
+    margin-bottom: 0.67em;
+  }
+
+  .ql-editor h2 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-top: 0.83em;
+    margin-bottom: 0.83em;
+  }
+
+  .ql-editor h3 {
+    font-size: 1.3em;
+    font-weight: bold;
+    margin-top: 1em;
+    margin-bottom: 1em;
+  }
+
+  .ql-editor h4 {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-top: 1.33em;
+    margin-bottom: 1.33em;
+  }
+
+  .ql-editor h5 {
+    font-size: 1em;
+    font-weight: bold;
+    margin-top: 1.67em;
+    margin-bottom: 1.67em;
+  }
+
+  .ql-editor h6 {
+    font-size: 0.9em;
+    font-weight: bold;
+    margin-top: 2.33em;
+    margin-bottom: 2.33em;
+  }
+
+  .ql-editor p {
+    margin-bottom: 1em;
+  }
+
+  .ql-editor ol,
+  .ql-editor ul {
+    padding-left: 1.5em;
+    margin-bottom: 1em;
+  }
+
+  .ql-editor li {
+    margin-bottom: 0.5em;
+  }
+
+  .ql-editor strong {
+    font-weight: bold;
+  }
+
+  .ql-editor em {
+    font-style: italic;
+  }
+
+  .ql-editor u {
+    text-decoration: underline;
+  }
+}
+
 :root {
   --background: #fff9f5;
   --foreground: #1a1a1a;
@@ -42,6 +113,7 @@ body {
 .font-serif {
   font-family: 'Charter', Georgia, serif;
 }
+
 /* Explicit Roboto utility for headlines when needed */
 .font-roboto {
   font-family: 'Roboto', sans-serif;
@@ -182,4 +254,10 @@ article blockquote {
 
 .ql-editor {
   min-height: 300px;
+}
+
+/* Override Quill editor min-height when used for rendered content (not editing) */
+article .ql-editor {
+  min-height: unset;
+  padding: 0;
 }

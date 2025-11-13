@@ -95,7 +95,6 @@ export default async function Home() {
         .in("layout_type", ["big_blog", "trending"])
         .eq("status", "published")
         .order("published_at", { ascending: false }),
-      // Get first 6 standard posts to feed both sidebars
       supabase
         .from("blogs")
         .select("title,cover_image,category,slug")

@@ -16,7 +16,7 @@ export default function StoryCard({ story }) {
           />
         </div>
         <div className="flex-1 min-w-0">
-          <h2 className="text-2xl font-semibold text-gray-900 group-hover:text-blue-600 transition-colors truncate">
+          <h2 className="text-2xl font-semibold text-gray-900  transition-colors truncate">
             {story.title}
           </h2>
           <p className="text-base text-gray-700 mt-2 leading-relaxed line-clamp-2">{story.excerpt}</p>
