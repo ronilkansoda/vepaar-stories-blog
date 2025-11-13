@@ -3,6 +3,7 @@ import Image from "next/image";
 import { supabase } from "@/lib/supabaseClient";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import RelatedArticles from "@/components/RelatedArticles";
+import Porse from "@/components/porse";
 
 const BASE_URL = (process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000").replace(/\/$/, "");
 
@@ -247,7 +248,7 @@ export default async function PostPage({ params }) {
                     </div>
                 )}
                 <div className="text-[16px] leading-relaxed text-gray-800 mb-14 sm:text-[18px] sm:mb-16 blog-content">
-                    <div dangerouslySetInnerHTML={{ __html: data.content }} />
+                    <Porse value={data.content} />
                 </div>
 
                 {/* Related Articles */}

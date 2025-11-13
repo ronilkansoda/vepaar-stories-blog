@@ -1,3 +1,4 @@
+
 "use client";
 import dynamic from "next/dynamic";
 import { useMemo } from "react";
@@ -33,12 +34,21 @@ export default function RichTextEditor({ value, onChange, placeholder }) {
         "align",
     ];
 
+    const handleChange = (content, delta, source, editor) => {
+        let html = editor.getHTML();
+
+        // Convert empty paragraphs to <br/>
+        html = html.replace(/<p><br><\/p>/g, "<br/>");
+
+        onChange(html);
+    };
+
     return (
         <div className="w-full p-2 border rounded">
             <ReactQuill
                 theme="snow"
                 value={value || ""}
-                onChange={onChange}
+                onChange={handleChange}
                 modules={modules}
                 formats={formats}
                 placeholder={placeholder}

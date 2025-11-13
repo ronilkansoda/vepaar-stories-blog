@@ -11,4 +11,12 @@ module.exports = {
   plugins: [
     require('@tailwindcss/typography'),
   ],
+  layers: {
+    'no-tailwindcss': {
+      // Add any styles you want to disable here
+      '.no-tailwindcss': {
+        all: 'unset',
+      },
+    },
+  },
 }
